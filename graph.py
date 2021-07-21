@@ -14,6 +14,27 @@ class Graph():
     def addEdge(self,u,v):
         self.graph[u].append(v)
 
+    def BFS(self,s):
+        # queue 
+        queue = []
+        # mark all nodes are not visited yet 
+        visited = [False for k in range(max(self.graph) + 1)]
+        # append a node to s 
+        queue.append(s)
+        # mark visited 
+        visited[s] = True
+        # loop until emtpy queue 
+        while queue:
+            # dequeue a node from queue 
+            s = queue.pop(0)
+            print("visited node {0}".format(s))
+            # add neighbours to the queue 
+            for neighbour in self.graph[s]:
+                if visited[neighbour] == False:
+                    queue.append(neighbour)
+                    visited[neighbour] = True 
+
+
     def DFSUtil(self,v,visited):
         # mark v as visited 
         visited.add(v)
@@ -41,9 +62,23 @@ def testDFS():
     g.addEdge(2, 0)
     g.addEdge(2, 3)
     g.addEdge(3, 3)
+    print("test DFS")
     g.DFS()
+
+
+def testBFS():
+    g = Graph()
+    g.addEdge(0, 1)
+    g.addEdge(0, 2)
+    g.addEdge(1, 2)
+    g.addEdge(2, 0)
+    g.addEdge(2, 3)
+    g.addEdge(3, 3)
+    print("test BFS")
+    g.BFS(2)
     
 
 
 if __name__=="__main__":
     testDFS()
+    testBFS()
