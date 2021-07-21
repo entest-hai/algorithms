@@ -35,23 +35,45 @@ class Graph():
                     visited[neighbour] = True 
 
 
-    def DFSUtil(self,v,visited):
+    def DFSUtil(self,temp,v,visited):
         # mark v as visited 
         visited.add(v)
+        # store visited to temp 
+        temp.append(v)
         # print visited 
         print("visited node {0}".format(v))
         # recursive on neighbor of v 
         for neighbour in self.graph[v]:
             if neighbour not in visited:
-                self.DFSUtil(neighbour,visited)
+                temp = self.DFSUtil(temp,neighbour,visited)
+        # return connected component for the node v 
+        return temp
 
     def DFS(self):
         # init visited 
         visited = set()
-        # 
+        # loop over all vertex (nodes might not be all connected)
+        for vertex in list(self.graph):
+            temp = []
+            if vertex not in visited:
+                self.DFSUtil(temp,vertex,visited)
+                print("component of node {0} is {1}".format(vertex, temp))
+
+
+    def connectedComponents(self):
+        # init output 
+        cc = defaultdict(list)
+        # visited init 
+        visited = set()
+        # loop over all node
         for vertex in list(self.graph):
             if vertex not in visited:
-                self.DFSUtil(vertex,visited)
+                cc[vertex] = self.DFSUtil([],vertex,visited)
+        # print output 
+        for node in cc:
+            print("node {0} ==> {1}".format(node,cc[node]))
+        # return 
+        return cc 
 
 
 def testDFS():
@@ -78,7 +100,16 @@ def testBFS():
     g.BFS(2)
     
 
+def testComponent():
+    g = Graph()
+    g.addEdge(1, 0)
+    g.addEdge(2, 3)
+    g.addEdge(3, 4)
+    g.connectedComponents()
+
+
 
 if __name__=="__main__":
-    testDFS()
-    testBFS()
+    # testDFS()
+    # testBFS()
+    testComponent()
